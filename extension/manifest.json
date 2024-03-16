@@ -1,6 +1,6 @@
 { 
     "manifest_version": 3,
-    "name": "VidSense",
+    "name": "Hindify",
     "description": "Get an answer to your question based on the YouTube video in the current tab.",
     "version": "1.0",
     "permissions": ["activeTab", "declarativeContent"],
