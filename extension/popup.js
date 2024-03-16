@@ -1,27 +1,28 @@
 const btn = document.getElementById("translate");
-const inputQuestion = document.getElementById("language");
+const inputText = document.getElementById("englishText");
+const audioPlayer = document.getElementById("audioPlayer");
 
 btn.addEventListener("click", function() {
     btn.disabled = true;
-    btn.innerHTML = "Getting audio...";
+    btn.innerHTML = "Translating and getting audio...";
     btn.style.boxShadow = 'None';
 
-    chrome.tabs.query({ currentWindow: true, active: true }, function(tabs) {
-        var url = tabs[0].url;
-        var question = inputQuestion.value;
-        var xhr = new XMLHttpRequest();
+    const text = inputText.value;
+    const xhr = new XMLHttpRequest();
 
-        xhr.open("GET", "http://127.0.0.1:5000/answer?url=" + url + "&question=" + encodeURIComponent(question), true);
+    xhr.open("GET", "http://127.0.0.1:5000/answer?url=" + encodeURIComponent(text), true);
 
-        xhr.onload = function() {
-            var answer = xhr.responseText;
-            const p = document.getElementById("output");
-            p.innerHTML = "Audio: " + answer;
-            btn.disabled = false;
-            btn.innerHTML = "Translate Audio";
-            btn.style.boxShadow = '5px 5px 5px rgba(0, 0, 0, 0.3)';
-        };
+    xhr.onload = function() {
+        const response = JSON.parse(xhr.responseText);
+        const audioUrl = response.audio_url;
+        audioPlayer.src = audioUrl;
+        audioPlayer.style.display = "block";
+        audioPlayer.play();
+        
+        btn.disabled = false;
+        btn.innerHTML = "Translate to Hindi and Get Audio";
+        btn.style.boxShadow = '5px 5px 5px rgba(0, 0, 0, 0.3)';
+    };
 
-        xhr.send();
-    });
+    xhr.send();
 });
